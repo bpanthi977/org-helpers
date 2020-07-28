@@ -15,7 +15,8 @@
 
 (export 'fit)
 (defun fit (lambda initial &key (data (slot-value *table* 'list)))
-  (fit::fit lambda data initial t t))
+   (fit::fit lambda data initial t t))
+  
 
 (export 'multilinear-fit)
 (defun multilinear-fit (&key (data (slot-value *table* 'list)))
@@ -163,15 +164,15 @@
    :stream (merge-pathnames file *img-path*)))
 
 (export 'scatter-plot)
-(defun scatter-plot (fit-func file &optional (data *bigdata*))
+(defun scatter-plot (fit-func file &optional (data *bigdata*) (ylabel "Fitted T") (fitTitle "Fit"))
   (let ((tp-and-fit (loop for (x tp) in data 
 			  for fitted-tp = (funcall fit-func x)
 			  collect  (list tp fitted-tp))))
     (with-plot file
-      (setup :xlabel "Exact T" :ylabel "Fitted T" 
+      (setup :xlabel "Exact Period (sec)" :ylabel ylabel
 	     :terminal '(:png :size :|1500,1100| :font "Times New Roman, 30pt"))
-      (ezplot tp-and-fit :title "Fit" :with '(:point))
-      (eazy-gnuplot:plot "x" :with '(:lines) :title "Exact"))))
+      (ezplot tp-and-fit :title fitTitle :with '(:point))
+      (eazy-gnuplot:plot "x" :with '(:lines) :title "Perfect Fit"))))
 
 (export 'comparision-scatter-plot)
 (defun comparision-scatter-plot (fit-func other-funcs titles file &optional (data *bigdata*))
